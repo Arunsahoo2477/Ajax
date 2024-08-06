@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        .btn-primary:hover {
+           background-color: rgb(39, 122, 218);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h2>Time ! <span id="time"></span></h2>
+                <h3 id="demo"></h3>
+                <div class="form-group">
+                    <button id="btnGet" class="btn btn-primary w-25">Data</button>
+                </div>
+                <div class="form-group">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Author</th>
+                                <th>URL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const d = new Date();
+        let text = d.toLocaleDateString();
+        document.getElementById("demo").innerHTML = text;
+        $(function () {
+            var now = new Date();
+            $("#time").html(now.toLocaleString());
+            $("#btnGet").click(function () {
+                $.ajax({
+                    url: "https://newsapi.org/v2/top-headlines?country=in&apiKey=319807a57b7543beb0c88fa9a18d63cf"
+                    // url: "https://jsonplaceholder.typicode.com/posts/1"
+                    //   url: "https://data.covid19india.org/v4/min/timeseries.min.json",
+                }).done(function (data) {
+                    $.each(data, function (key, value) {
+                        let a = data.articles;
+                        console.log(">>>DATA", data)
+                        a.forEach((item, index) => {
+                            console.log(index, item)
+                            console.log("Hello>>>>>", item.title)
+                            //   $(`<tr><td>${item.name}</td><td>${item.author}</td><td>${item.title}</td><td>${item.description}</td><td>${item.content}</td><td>${item.url}</td></tr>`).appendTo("tbody");
+                            $(`<tr><td>${item.author}</td><td>${item.title}</td><td><a href="${item.url}">${item.url}</a></td></tr>`).appendTo("tbody");
+                        })
+                    })
+                }).fail(function () {
+                    alert("Something went wrong");
+                })
+            })
+
+        })
+        //
+
+    </script>
+</body>
+
+</html>
